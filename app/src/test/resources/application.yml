@@ -1,0 +1,20 @@
+spring:
+  profiles:
+    active: test
+
+---
+
+debug: false
+logging.level:
+  root: INFO
+#  org.springframework.expression: TRACE
+  com.github.danielwii.starter: DEBUG
+spring:
+  profiles: test
+  jpa:
+    generate-ddl: false
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+  jooq:
+    sql-dialect: h2

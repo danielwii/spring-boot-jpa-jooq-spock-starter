@@ -1,0 +1,41 @@
+plugins {
+    id 'groovy'
+}
+
+compileGroovy {
+    options.encoding = "UTF-8"
+}
+
+dependencies {
+    compile project(':entities')
+
+    compile('org.springframework.boot:spring-boot-starter')
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-jooq')
+
+    compile "org.jooq:jooq"
+
+    compile "ch.qos.logback:logback-classic:1.2.3"
+    compileOnly "org.projectlombok:lombok:1.18.0"
+
+    runtime "com.h2database:h2"
+    runtime "mysql:mysql-connector-java"
+
+    testCompile "org.codehaus.groovy:groovy-all:2.4.15"
+    testCompile "io.rest-assured:rest-assured:3.0.3"
+    testCompile "io.rest-assured:spring-mock-mvc:3.0.3"
+    // https://mvnrepository.com/artifact/org.spockframework/spock-core
+    testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
+    testCompile "org.spockframework:spock-spring:1.1-groovy-2.4"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.springframework.security:spring-security-test"
+    testCompile "org.springframework.restdocs:spring-restdocs-restassured"
+    testCompile "org.springframework.restdocs:spring-restdocs-mockmvc"
+}
+
+configurations.compile.each {
+    println "compile: $it"
+}
+
+//compileGroovy.dependsOn jooq

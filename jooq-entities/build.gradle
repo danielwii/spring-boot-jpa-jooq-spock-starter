@@ -1,0 +1,50 @@
+plugins {
+    id 'nu.studer.jooq' version '2.0.11'
+}
+
+dependencies {
+    compile project(':entities')
+
+    compile "org.jooq:jooq"
+
+    jooqRuntime project(':entities')
+    jooqRuntime("org.jooq:jooq-meta-extensions")
+
+    // Fix javax/xml/bind/ValidationEventHandler issue
+    // https://github.com/etiennestuder/gradle-jooq-plugin/issues/55
+    //    jooqRuntime('javax.xml.bind:jaxb-api:2.3.0')
+    //    jooqRuntime('com.sun.xml.bind:jaxb-impl:2.3.0')
+    //    jooqRuntime('com.sun.xml.bind:jaxb-core:2.3.0')
+    //    jooqRuntime("javax.activation:activation:1.1.1")
+}
+
+jooq {
+    basic(sourceSets.main) {
+        generator {
+            name = 'org.jooq.util.DefaultGenerator'
+            database {
+                name = "org.jooq.util.jpa.JPADatabase"
+                properties {
+                    property {
+                        key = 'packages'
+                        value = 'com.github.danielwii.starter.entities'
+                    }
+                    property {
+                        key = 'use-attribute-converters'
+                        value = true
+                    }
+                    property {
+                        key = 'log4j.logger.org.hibernate'
+                        value = 'info'
+                    }
+                }
+            }
+            generate {
+            }
+            target {
+                packageName = 'com.github.danielwii.starter.db'
+                directory = 'src/generated/java'
+            }
+        }
+    }
+}
