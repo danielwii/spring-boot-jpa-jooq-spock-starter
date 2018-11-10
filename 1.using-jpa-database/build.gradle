@@ -1,6 +1,15 @@
+buildscript {
+    repositories {
+        maven { url 'http://repo.spring.io/plugins-release' }
+    }
+    dependencies {
+        classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
+    }
+}
+
 plugins {
     id "com.github.ben-manes.versions" version "0.20.0"
-    id 'org.springframework.boot' version '2.0.3.RELEASE'
+    id 'org.springframework.boot' version '2.1.0.RELEASE'
     id 'io.franzbecker.gradle-lombok' version '1.14'
 
 //    id "org.liquibase.gradle" version "1.2.4"
@@ -13,34 +22,56 @@ plugins {
 
 allprojects {
     group = 'com.github.danielwii'
-    version = '0.0.1-SNAPSHOT'
+}
+
+// https://github.com/tbroyer/gradle-apt-plugin
+allprojects { project ->
+    project.plugins.withId("net.ltgt.apt") {
+        try {
+            // automatically apply net.ltgt.apt-idea whenever net.ltgt.apt is used
+            project.apply plugin: "net.ltgt.apt-idea"
+            // disable addAptDependencies (if you delegate build actions to Gradle)
+            project.plugins.withType(JavaPlugin) {
+                project.afterEvaluate {
+                    project.idea.module.apt.addAptDependencies = false
+                }
+            }
+        } catch (UnknownPluginException) {
+            // ignore, in case an older version of net.ltgt.apt is being used
+            // that doesn't come with net.ltgt.apt-idea.
+        }
+    }
 }
 
 subprojects {
-    apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'org.springframework.boot'
-    apply plugin: "com.github.ben-manes.versions"
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: "com.github.ben-manes.versions"   // 版本检测
     apply plugin: "io.franzbecker.gradle-lombok"
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    apply plugin: 'propdeps'
+    apply plugin: 'propdeps-maven'
+    apply plugin: 'propdeps-idea'
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
+    ext['jooq.version'] = '3.11.7'
+
+    lombok {
+        // 1.16.20 will cause
+        // java.lang.ClassNotFoundException: com.sun.tools.javac.code.TypeTags
+        version = "1.18.4"
     }
 
-    configurations {
-        all*.exclude module: 'commons-logging'
-    }
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
-//    task sourcesJar(type: Jar) {
-//        classifier = 'sources'
-//        from sourceSets.main.output
-////        from sourceSets.main.allSource
-//    }
+    dependencies {
+        // https://stackoverflow.com/a/43574427/3480445
+        compile('javax.xml.bind:jaxb-api:2.3.1')
+        compile('com.sun.xml.bind:jaxb-impl:2.3.0.1')
+        compile('com.sun.xml.bind:jaxb-core:2.3.0.1')
+        compile("javax.activation:activation:1.1.1")
+    }
 
     [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 }

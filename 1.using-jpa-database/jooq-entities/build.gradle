@@ -1,5 +1,12 @@
+buildscript {
+    dependencies {
+        // https://medium.com/@marekscholle/jooq-with-gradle-and-java-11-a6f10efff297
+        classpath "org.glassfish.jaxb:jaxb-runtime:2.3.1"
+    }
+}
+
 plugins {
-    id 'nu.studer.jooq' version '2.0.11'
+    id 'nu.studer.jooq' version '3.0.2'
 }
 
 dependencies {
@@ -19,6 +26,7 @@ dependencies {
 }
 
 jooq {
+    version = '3.11.7'
     basic(sourceSets.main) {
         generator {
             name = 'org.jooq.util.DefaultGenerator'
