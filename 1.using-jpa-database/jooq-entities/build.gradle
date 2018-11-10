@@ -29,9 +29,9 @@ jooq {
     version = '3.11.7'
     basic(sourceSets.main) {
         generator {
-            name = 'org.jooq.util.DefaultGenerator'
+            name = 'org.jooq.codegen.DefaultGenerator'
             database {
-                name = "org.jooq.util.jpa.JPADatabase"
+                name = "org.jooq.meta.extensions.jpa.JPADatabase"
                 properties {
                     property {
                         key = 'packages'

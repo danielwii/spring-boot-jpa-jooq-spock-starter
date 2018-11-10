@@ -21,7 +21,7 @@ dependencies {
     runtime "com.h2database:h2"
     runtime "mysql:mysql-connector-java"
 
-    testCompile "io.rest-assured:spring-mock-mvc:3.0.3"
+    testCompile "io.rest-assured:spring-mock-mvc:3.2.0"
     testCompile "org.spockframework:spock-spring:1.1-groovy-2.4"
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "org.springframework.security:spring-security-test"
